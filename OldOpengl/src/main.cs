@@ -96,13 +96,13 @@ class main
             int VBO = GL.GenBuffer();
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ArrayBuffer,VBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float)*CubeVertexes.Length, CubeVertexes,BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float)*CubeVertexes.Length, CubeVertexes,BufferUsageHint.StaticDraw); //
+            //Разметка того как будет восприниматься каждая вершина(сколько памяти занимает каждый вертекс и его атрибуты, а также где эти атрибуты распалогать в шейдерах)
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 3,VertexAttribPointerType.Float , false, 6 * sizeof(float),0);
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
-            //инициализация матрица позиции модели и камеры
-            var ModelTransform = Matrix4.CreateRotationY(180.0f) * Matrix4.CreateTranslation(new Vector3(0.0f,0.0f,10.0f));
+            var ModelTransform = Matrix4.CreateRotationY(180.0f) * Matrix4.CreateTranslation(new Vector3(0.0f,0.0f,10.0f));//Матрица модели
             var CameraRotation = new Vector3();
             var CameraPosition = new Vector3();
             var CameraView = Matrix4.Identity;
@@ -116,42 +116,19 @@ class main
             {
                 if (!window.Focused) return;
                 var KeyboardInput = Keyboard.GetState();
-                if (KeyboardInput.IsKeyDown(Key.W))
-                {
-                    CameraPosition += (Vector3.UnitZ* (float)e.Time * 10.0f);
-                  }
-                if (KeyboardInput.IsKeyDown(Key.S))
-                {
-                    CameraPosition += (-Vector3.UnitZ * (float)e.Time * 10.0f);
-                }
-                if (KeyboardInput.IsKeyDown(Key.A))
-                {
-                    CameraPosition += (Vector3.UnitX * (float)e.Time * 10.0f);
-                }
-                if (KeyboardInput.IsKeyDown(Key.D))
-                {
-                    CameraPosition += (-Vector3.UnitX * (float)e.Time * 10.0f);
-                }
-                if (KeyboardInput.IsKeyDown(Key.Up))
-                {
-                    CameraRotation += (Vector3.UnitX * (float)e.Time * 10.0f);
-                }
-                if (KeyboardInput.IsKeyDown(Key.Down))
-                {
-                    CameraRotation += (-Vector3.UnitX * (float)e.Time * 10.0f);
-                }
-                if (KeyboardInput.IsKeyDown(Key.Left))
-                {
-                    CameraRotation += (Vector3.UnitY * (float)e.Time * 10.0f);
-                }
-                if (KeyboardInput.IsKeyDown(Key.Right))
-                {
-                    CameraRotation += (-Vector3.UnitY* (float)e.Time * 10.0f);
-                }
+                if (KeyboardInput.IsKeyDown(Key.W)){CameraPosition += (Vector3.UnitZ* (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.S)){CameraPosition += (-Vector3.UnitZ * (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.A)){CameraPosition += (Vector3.UnitX * (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.D)){CameraPosition += (-Vector3.UnitX * (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.Up)){CameraRotation += (Vector3.UnitX * (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.Down)){CameraRotation += (-Vector3.UnitX * (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.Left)){CameraRotation += (Vector3.UnitY * (float)e.Time * 10.0f);}
+                if (KeyboardInput.IsKeyDown(Key.Right)){CameraRotation += (-Vector3.UnitY* (float)e.Time * 10.0f);}
             };
             window.RenderFrame+= (sender, e) => {
                 if (!window.Focused) return;
                 TimeFromStart += e.Time;
+                //e.Time это время прошедшее с последнего кадра
                 GL.Enable(EnableCap.DepthTest); //Включение проверки глубины
                 GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Очистка буфера цвета и глубины
                 GL.ClearColor(.0f,.0f,.0f,0.0f); //Ставим фоновый цвет
