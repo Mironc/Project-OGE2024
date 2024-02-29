@@ -17,8 +17,8 @@
 mono_crash.*
 
 # Build results
-OldOpengl/obj/
-OldOpengl/bin/
+/OldOpengl/obj/
+/OldOpengl/bin/
 Debug/
 [Dd]ebugPublic/
 Release/
