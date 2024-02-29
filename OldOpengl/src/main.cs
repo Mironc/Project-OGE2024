@@ -101,7 +101,7 @@ class main
             GL.VertexAttribPointer(0, 3,VertexAttribPointerType.Float , false, 6 * sizeof(float),0);
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
-            //инициализация позиций модели и камеры
+            //инициализация матрица позиции модели и камеры
             var ModelTransform = Matrix4.CreateRotationY(180.0f) * Matrix4.CreateTranslation(new Vector3(0.0f,0.0f,10.0f));
             var CameraRotation = new Vector3();
             var CameraPosition = new Vector3();
@@ -152,17 +152,18 @@ class main
             window.RenderFrame+= (sender, e) => {
                 if (!window.Focused) return;
                 TimeFromStart += e.Time;
-                GL.Enable(EnableCap.DepthTest);
-                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-                GL.ClearColor(.0f,.0f,.0f,0.0f);
-                LightPosition.X =  (float)Math.Sin(TimeFromStart) *  10.0f;
-                GL.UseProgram(Program);
+                GL.Enable(EnableCap.DepthTest); //Включение проверки глубины
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit); // Очистка буфера цвета и глубины
+                GL.ClearColor(.0f,.0f,.0f,0.0f); //Ставим фоновый цвет
+                LightPosition.X =  (float)Math.Sin(TimeFromStart) *  10.0f; //Перемещение света
+                GL.UseProgram(Program); //Делаем наши шейдеры активными
                 var CameraRotationMatrix = new Matrix3(
                     Matrix4.CreateRotationX(MathHelper.DegreesToRadians(CameraRotation.X)) *
                      Matrix4.CreateRotationY(MathHelper.DegreesToRadians(CameraRotation.Y)) *
-                     Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(CameraRotation.Z)));
-                CameraView = Matrix4.LookAt(CameraPosition,CameraPosition+Vector3.UnitZ*CameraRotationMatrix,Vector3.UnitY*CameraRotationMatrix);
-                CameraProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), Aspect, 0.01f, 1024.0f);
+                     Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(CameraRotation.Z))); // Создание матрицы поворота
+                CameraView = Matrix4.LookAt(CameraPosition,CameraPosition+Vector3.UnitZ*CameraRotationMatrix,Vector3.UnitY*CameraRotationMatrix); //Создание матрицы вида (отвечает за положение и поворот камеры)
+                CameraProjection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), Aspect, 0.01f, 1024.0f);//создание перспективной матрицы (создает эффект перспективы)
+                //Отправка информации в шейдеры(матрицы модели,вида,перспективы, цвета и тд)
                 GL.UniformMatrix4(GL.GetUniformLocation(Program,"transformation"),true,ref ModelTransform);
                 GL.UniformMatrix4(GL.GetUniformLocation(Program, "view"), true, ref CameraView);
                 GL.UniformMatrix4(GL.GetUniformLocation(Program, "projection"), true, ref CameraProjection);
@@ -172,9 +173,9 @@ class main
                 GL.Uniform1(GL.GetUniformLocation(Program, "Ambient"), AmbientStrength);
                 GL.Uniform3(GL.GetUniformLocation(Program, "ObjectColor"), ref ObjectColor);
                 GL.Uniform3(GL.GetUniformLocation(Program, "CameraPosition"), CameraView.ExtractTranslation());
-                GL.BindVertexArray(VAO);
-                GL.DrawArrays(PrimitiveType.Triangles, 0,CubeVertexes.Length);
-                window.Context.SwapBuffers();
+                GL.BindVertexArray(VAO); //делаем нашу модель активной
+                GL.DrawArrays(PrimitiveType.Triangles, 0,CubeVertexes.Length); // вызов отрисовки
+                window.Context.SwapBuffers(); //Смена буферов передний на задний
             };
             window.Run();
         }
