@@ -91,13 +91,6 @@ class main
             {
                 throw new Exception($"Linking error :{GL.GetProgramInfoLog(Program)}");
             }
-            //инициализация позиций модели и камеры
-            var ModelTransform = Matrix4.CreateRotationY(180.0f) * Matrix4.CreateTranslation(new Vector3(0.0f,0.0f,10.0f));
-            var CameraRotation = new Vector3();
-            var CameraPosition = new Vector3();
-            var CameraView = Matrix4.Identity;
-            var CameraProjection = Matrix4.Identity;
-            float Aspect =window.ClientSize.Width / window.ClientSize.Height;
             //отправляем модель в видеокарту для дальнейшей отрисовки
             int VAO = GL.GenVertexArray();
             int VBO = GL.GenBuffer();
@@ -108,6 +101,13 @@ class main
             GL.VertexAttribPointer(0, 3,VertexAttribPointerType.Float , false, 6 * sizeof(float),0);
             GL.EnableVertexAttribArray(1);
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+            //инициализация позиций модели и камеры
+            var ModelTransform = Matrix4.CreateRotationY(180.0f) * Matrix4.CreateTranslation(new Vector3(0.0f,0.0f,10.0f));
+            var CameraRotation = new Vector3();
+            var CameraPosition = new Vector3();
+            var CameraView = Matrix4.Identity;
+            var CameraProjection = Matrix4.Identity;
+            float Aspect =window.ClientSize.Width / window.ClientSize.Height;
 
             window.Resize += (sender, e) => { 
             GL.Viewport(window.ClientRectangle);
