@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{C7A3BBD1-0290-44EC-A3B5-D35EB58C9159}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <RootNamespace>Opengl</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="src\main.cs" />
+    <Compile Include="src\Graphic\Shader.cs" />
+    <Compile Include="src\Graphic\Program.cs" />
+    <Compile Include="src\Graphic\VBO.cs" />
+    <Compile Include="src\Graphic\EBO.cs" />
+    <Compile Include="src\Graphic\VAO.cs" />
+    <Compile Include="src\Graphic\IGraphic.cs" />
+    <Compile Include="src\Graphic\IVertex.cs" />
+    <Compile Include="src\Graphic\Mesh.cs" />
+    <Compile Include="src\Tools\TypeSize.cs" />
+    <Compile Include="src\Vertex.cs" />
+    <Compile Include="src\MeshLoader.cs" />
+    <Compile Include="src\Tools\VertexBuilder.cs" />
+    <Compile Include="src\Camera.cs" />
+    <Compile Include="src\Transform.cs" />
+    <Compile Include="src\Game.cs" />
+    <Compile Include="src\Graphic\Viewport.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\frag.glsl">
+      <Link>frag.glsl</Link>
+    </None>
+    <None Include="bin\Debug\MonkeyHead.obj">
+      <Link>MonkeyHead.obj</Link>
+    </None>
+    <None Include="bin\Debug\vert.glsl">
+      <Link>vert.glsl</Link>
+    </None>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK">
+      <HintPath>packages\OpenTK.3.3.3\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="src\Graphic\" />
+    <Folder Include="src\Tools\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
