@@ -63,20 +63,23 @@ class main
         using (var window = new GameWindow(800,800,OpenTK.Graphics.GraphicsMode.Default,"Game",GameWindowFlags.Default,DisplayDevice.Default,3,3,OpenTK.Graphics.GraphicsContextFlags.ForwardCompatible))
         {
             window.MakeCurrent();
-            //создание фрагментного и вершиного шейдера
+            //создание и компиляция вершинного шейдера
             int vertexShader = GL.CreateShader(OpenTK.Graphics.OpenGL.ShaderType.VertexShader);
             GL.ShaderSource(vertexShader, new StreamReader("vert.glsl").ReadToEnd());
             GL.CompileShader(vertexShader);
             int success = 0;
+            //проверка на ошибку компиляции
             GL.GetShader(vertexShader, ShaderParameter.CompileStatus, out success);
             if (success == (int)All.False)
             {
                 throw new Exception($"{GL.GetShaderInfoLog(vertexShader)}");
             }
+            //создание и компиляция фрагментного шейдера
             int fragmentShader = GL.CreateShader(OpenTK.Graphics.OpenGL.ShaderType.FragmentShader);
             GL.ShaderSource(fragmentShader, new StreamReader("frag.glsl").ReadToEnd());
             GL.CompileShader(fragmentShader);
             success = 0;
+            //проверка на ошибку компиляции
             GL.GetShader(fragmentShader, ShaderParameter.CompileStatus, out success);
             if (success == (int)All.False)
             {
@@ -91,13 +94,14 @@ class main
             {
                 throw new Exception($"Linking error :{GL.GetProgramInfoLog(Program)}");
             }
-            //отправляем модель в видеокарту для дальнейшей отрисовки
+            //создание 
             int VAO = GL.GenVertexArray();
             int VBO = GL.GenBuffer();
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ArrayBuffer,VBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float)*CubeVertexes.Length, CubeVertexes,BufferUsageHint.StaticDraw); //
-            //Разметка того как будет восприниматься каждая вершина(сколько памяти занимает каждый вертекс и его атрибуты, а также где эти атрибуты распалогать в шейдерах)
+            //передаём массив вершин в буфер вершин 
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float)*CubeVertexes.Length, CubeVertexes,BufferUsageHint.StaticDraw); 
+            //Разметка того как будет восприниматься каждая вершина
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 3,VertexAttribPointerType.Float , false, 6 * sizeof(float),0);
             GL.EnableVertexAttribArray(1);
